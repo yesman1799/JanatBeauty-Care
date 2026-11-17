@@ -11,7 +11,17 @@ npm run build   # produkční build do složky dist/
 npm run check   # kontrola ceníku (duplicity, počet položek)
 ```
 
-Vyžaduje Node.js 22 (nebo novější).
+Vyžaduje **Node.js 22.23.4 nebo novější** (zjistíte příkazem `node -v`, stáhnete na https://nodejs.org).
+
+### Windows – časté potíže
+- **Stará verze Node:** `npm ci` skončí chybou `EBADENGINE`. Nainstalujte aktuální LTS z nodejs.org a otevřete terminál znovu.
+- **PowerShell: „running scripts is disabled“:** použijte Příkazový řádek (cmd), nebo spusťte `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+- **Po `git pull` se změnily závislosti:** spusťte znovu `npm ci`.
+
+### Náhled a build
+- `npm run dev`: vývojový náhled na http://localhost:4321 (změny se projeví hned, ukončení Ctrl + C)
+- `npm run build`: hotový web do složky `dist/`
+- `npm run preview`: náhled hotového buildu
 
 ## Kde co upravit
 
@@ -39,7 +49,7 @@ Položky s `⚠ DOPLNIT` / `⚠ OVĚŘIT` v `src/data/site.ts` je potřeba zkont
 ## Nasazení (doporučeno: Cloudflare Pages nebo Netlify, zdarma)
 
 **Cloudflare Pages:** Workers & Pages → Create → Pages → připojit GitHub repo →
-Build command `npm run build`, Output `dist`, proměnná `NODE_VERSION=22`.
+Build command `npm run build`, Output `dist`, proměnná `NODE_VERSION=22.23.4`.
 
 **Netlify:** Add new site → Import from Git → nastavení se načte z `netlify.toml`.
 

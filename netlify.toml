@@ -3,5 +3,5 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "22"
+  NODE_VERSION = "22.23.4"
 # Bezpečnostní hlavičky jsou v public/_headers

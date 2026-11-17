@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Booking from '../components/Booking.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+const tel = site.phone.replace(/\s/g, '');
+---
+<Base title="Online rezervace" description="Rezervujte si termín v salonu Beauty & Care Janat online, rychle a bez volání. Kosmetika, řasy, masáže, nehty i kadeřnictví.">
+  <PageHero eyebrow="Online rezervace" title="Váš čas <em>jen pro vás</em>"
+    lead="Vyberte si službu a termín, který vám sedí. Potvrzení dostanete e-mailem a připomenutí před návštěvou." />
+  <section class="container rez">
+    <Booking />
+    <div class="rez__info">
+      <div><Icon name="clock" size={24} /><p><strong>Zrušení termínu</strong>Zdarma nejpozději {site.terms.cancellationHours} h předem. <a href="/obchodni-podminky">Rezervační podmínky</a></p></div>
+      <div><Icon name="phone" size={24} /><p><strong>Raději telefonicky?</strong>Zavolejte na <a href={`tel:${tel}`}>{site.phone}</a>.</p></div>
+      <div><Icon name="pin" size={24} /><p><strong>Kde nás najdete</strong>{site.address.street}, {site.address.city}. <a href="/kontakt">Jak se k nám dostat</a></p></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .rez { padding-bottom: 5rem; }
+  .rez__info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .rez__info > div { display: flex; gap: .9rem; align-items: flex-start; }
+  .rez__info :global(svg) { flex: none; color: var(--rose); margin-top: .2rem; }
+  .rez__info p { margin: 0; color: var(--ink-soft); font-size: .93rem; }
+  .rez__info strong { display: block; color: var(--ink); }
+  .rez__info a { color: var(--rose-deep); }
+  @media (max-width: 820px) { .rez__info { grid-template-columns: 1fr; } }
+</style>

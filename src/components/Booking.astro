@@ -1,0 +1,58 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+const tel = site.phone.replace(/\s/g, '');
+---
+<div class="booking" data-booking data-src={site.bookingUrl}>
+  <div class="booking__placeholder" data-booking-placeholder>
+    <Icon name="calendar" size={44} class="booking__icon" />
+    <h3>Vyberte si službu a volný termín</h3>
+    <p>
+      Rezervace běží přes zabezpečený systém <strong>Noona</strong>. Po kliknutí se načte přímo zde
+      a uvidíte všechny volné termíny. Potvrzení vám přijde e-mailem či SMS.
+    </p>
+    <button type="button" class="btn btn--primary" data-booking-load>
+      Zobrazit volné termíny <Icon name="arrow" size={18} />
+    </button>
+    <p class="booking__small">
+      Kliknutím souhlasíte s načtením služby Noona (může ukládat vlastní cookies)
+      a s <a href="/obchodni-podminky">rezervačními podmínkami</a>.
+      <br />Raději telefonicky? Volejte <a href={`tel:${tel}`}>{site.phone}</a>.
+    </p>
+  </div>
+  <div class="booking__frame" data-booking-frame>
+    <div class="booking__loader" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
+  <noscript>
+    <p class="booking__noscript">
+      Pro zobrazení rezervace povolte JavaScript, nebo otevřete
+      <a href={site.bookingDirectUrl} target="_blank" rel="noopener noreferrer">rezervaci na noona.app</a>.
+    </p>
+  </noscript>
+</div>
+
+<style>
+  .booking {
+    position: relative; background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; min-height: 440px;
+  }
+  .booking__placeholder { text-align: center; padding: clamp(2.5rem, 7vw, 4.5rem) clamp(1.2rem, 5vw, 3rem); max-width: 600px; margin-inline: auto; }
+  .booking__placeholder[hidden] { display: none; }
+  .booking__placeholder :global(.booking__icon) { color: var(--rose); margin: 0 auto 1.2rem; }
+  .booking__placeholder h3 { font-size: clamp(1.7rem, 4vw, 2.2rem); }
+  .booking__placeholder p { color: var(--ink-soft); }
+  .booking__placeholder .btn { margin: .8rem 0 1.4rem; }
+  .booking__small { font-size: .82rem; }
+  .booking__small a { color: var(--rose-deep); }
+  .booking__frame { display: none; position: relative; }
+  :global(.booking.is-loading) .booking__frame { display: block; }
+  .booking__frame :global(.booking__iframe) { display: block; width: 100%; height: 80vh; min-height: 640px; border: 0; opacity: 0; transition: opacity .5s ease; }
+  :global(.booking.is-ready) .booking__frame :global(.booking__iframe) { opacity: 1; }
+  .booking__loader { position: absolute; inset: 0; display: flex; align-items: flex-start; justify-content: center; gap: .5rem; padding-top: 8rem; }
+  :global(.booking.is-ready) .booking__loader { display: none; }
+  .booking__loader span { width: 10px; height: 10px; border-radius: 50%; background: var(--rose); animation: dot 1.2s infinite ease-in-out; }
+  .booking__loader span:nth-child(2) { animation-delay: .15s; }
+  .booking__loader span:nth-child(3) { animation-delay: .3s; }
+  @keyframes dot { 0%, 80%, 100% { opacity: .25; transform: scale(.8); } 40% { opacity: 1; transform: none; } }
+  .booking__noscript { padding: 1.5rem; text-align: center; }
+</style>

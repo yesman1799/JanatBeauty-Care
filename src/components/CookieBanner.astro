@@ -1,0 +1,42 @@
+---
+---
+<div class="cookie" role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-desc" data-cookie hidden>
+  <div class="cookie__inner">
+    <h2 id="cookie-title" class="cookie__title">Cookies &amp; soukromí</h2>
+    <p id="cookie-desc">
+      Náš web sám žádné sledovací cookies nepoužívá. Online rezervaci ale zajišťuje služba
+      <strong>Noona</strong>, která pro svůj chod ukládá vlastní cookies. Načte se až s vaším souhlasem.
+      <a href="/ochrana-osobnich-udaju#cookies">Více informací</a>
+    </p>
+    <label class="cookie__opt">
+      <input type="checkbox" checked disabled /> <span><strong>Nezbytné</strong> – zapamatování vaší volby</span>
+    </label>
+    <label class="cookie__opt">
+      <input type="checkbox" data-cookie-booking /> <span><strong>Rezervační systém Noona</strong> – online objednání termínu</span>
+    </label>
+    <div class="cookie__actions">
+      <button type="button" class="btn btn--ghost" data-cookie-reject>Jen nezbytné</button>
+      <button type="button" class="btn btn--ghost" data-cookie-save>Uložit výběr</button>
+      <button type="button" class="btn btn--primary" data-cookie-accept>Povolit vše</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookie { position: fixed; z-index: 80; left: 16px; right: 16px; bottom: 16px; display: flex; justify-content: center; pointer-events: none; }
+  .cookie[hidden] { display: none; }
+  .cookie__inner {
+    pointer-events: auto; width: min(640px, 100%); background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: 0 30px 70px -20px rgba(37, 45, 103, .3); padding: 1.6rem 1.7rem;
+    font-size: .93rem; animation: cookieIn .45s ease both;
+  }
+  @keyframes cookieIn { from { opacity: 0; transform: translateY(20px); } }
+  .cookie__title { font-size: 1.7rem; margin-bottom: .4rem; }
+  .cookie p { color: var(--ink-soft); }
+  .cookie p a { color: var(--rose-deep); }
+  .cookie__opt { display: flex; gap: .7rem; align-items: flex-start; margin-bottom: .55rem; cursor: pointer; }
+  .cookie__opt input { accent-color: var(--rose-deep); width: 18px; height: 18px; margin-top: .25rem; flex: none; }
+  .cookie__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.1rem; justify-content: flex-end; }
+  .cookie__actions .btn { padding: .75rem 1.2rem; font-size: .88rem; }
+  @media (max-width: 560px) { .cookie__actions .btn { flex: 1 1 100%; } }
+</style>

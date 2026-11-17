@@ -1,0 +1,16 @@
+---
+interface Props { eyebrow: string; title: string; lead?: string }
+const { eyebrow, title, lead } = Astro.props;
+---
+<section class="ph">
+  <div class="container">
+    <span class="eyebrow">{eyebrow}</span>
+    <h1 set:html={title} />
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .ph { padding-block: clamp(3rem, 8vw, 5.5rem) clamp(2rem, 5vw, 3rem); background: radial-gradient(ellipse at 90% 0%, var(--blush), transparent 55%); }
+  .ph h1 { max-width: 16ch; }
+</style>

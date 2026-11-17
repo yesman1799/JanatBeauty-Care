@@ -1,0 +1,300 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Booking from '../components/Booking.astro';
+import ContactInfo from '../components/ContactInfo.astro';
+import Photo from '../components/Photo.astro';
+import kosmetika from '../assets/photos/kosmetika-mistnost.jpg';
+import recepce from '../assets/photos/recepce.jpg';
+import pedikura from '../assets/photos/pedikura-kreslo.jpg';
+import vyloha from '../assets/photos/vyloha.jpg';
+import { site, services } from '../data/site';
+import { pricing } from '../data/pricing';
+const totalServices = pricing.reduce((n, c) => n + c.groups.reduce((m, g) => m + g.items.length, 0), 0);
+
+// „od“ cena = nejnižší cena hlavních služeb (první skupina kategorie), bez doplňků typu lakování/odstranění
+const EXTRA = /^(Odstranění|Sundání|Lakování|Zdobení)/;
+const fromPrice = (id: string) => {
+  const first = pricing.find((c) => c.id === id)?.groups[0];
+  const nums = first?.items.filter((i) => !EXTRA.test(i.name)).map((i) => i.price).filter((p): p is number => typeof p === 'number') ?? [];
+  return nums.length ? Math.min(...nums) : null;
+};
+const minFor = (id: string) => {
+  const ids = id === 'manikura' ? ['manikura', 'pedikura'] : [id];
+  const vals = ids.map(fromPrice).filter((v): v is number => v !== null);
+  return vals.length ? Math.min(...vals) : null;
+};
+const fmt = (n: number) => n.toLocaleString('cs-CZ').replace(/\s/g, ' ');
+---
+<Base>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__text">
+        <span class="eyebrow">Kosmetický salon · Praha 5 – Smíchov</span>
+        <h1>Krása, která <em>začíná péčí</em></h1>
+        <p class="lead">
+          Už od roku 2012 se u nás na Smíchově staráme o pleť, řasy, nehty, vlasy i celkovou pohodu.
+          Přijďte si odpočinout, dát si dobrou kávu – o zbytek se postaráme my.
+        </p>
+        <div class="hero__cta">
+          <a href="/rezervace" class="btn btn--primary"><Icon name="calendar" size={18} /> Rezervovat online</a>
+          <a href="/cenik" class="btn btn--ghost">Prohlédnout ceník</a>
+        </div>
+        <ul class="hero__facts">
+          <li><strong>{new Date().getFullYear() - site.foundedYear}+</strong><span>let s vámi</span></li>
+          <li><strong>{totalServices}</strong><span>ošetření v nabídce</span></li>
+          <li><strong>24/7</strong><span>online rezervace</span></li>
+        </ul>
+      </div>
+
+      <div class="hero__visual">
+        <div class="arch">
+          <Photo src={kosmetika} alt="Kosmetická místnost salonu Janat s lehátkem a přístroji" sizes="(max-width: 960px) 360px, 460px" class="arch__img" eager widths={[400, 600, 800, 1000]} />
+        </div>
+        <div class="float-card float-card--top" aria-hidden="true">
+          <span class="dot"></span> Volné termíny online
+        </div>
+        <div class="float-card float-card--bottom" aria-hidden="true">
+          <Icon name="sparkle" size={22} />
+          <div><strong>For Life &amp; Madaga</strong><span>René D'essay</span></div>
+        </div>
+        <div class="circle" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HODNOTY -->
+  <section class="values">
+    <div class="container values__grid">
+      <div class="value reveal">
+        <Icon name="heart" size={30} />
+        <div><h3>Osobní přístup</h3><p>Každé ošetření začíná rozhovorem. Péči volíme podle vaší pleti a přání.</p></div>
+      </div>
+      <div class="value reveal">
+        <Icon name="leaf" size={30} />
+        <div><h3>Profesionální kosmetika</h3><p>Pracujeme s ověřenými značkami For Life &amp; Madaga a René D'essay.</p></div>
+      </div>
+      <div class="value reveal">
+        <Icon name="shield" size={30} />
+        <div><h3>Čistota a hygiena</h3><p>Dezinfekce, jednorázové pomůcky a klidné, čisté prostředí.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLUŽBY -->
+  <section class="section" id="sluzby">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Naše služby</span>
+          <h2>Péče od hlavy <em>až k patě</em></h2>
+        </div>
+        <p class="lead">Vyberte si oblast, která vás zajímá. Kompletní nabídku s cenami najdete v ceníku.</p>
+      </div>
+      <div class="services">
+        {services.map((s) => {
+          const min = minFor(s.id);
+          return (
+            <a href={`/cenik#${s.id}`} class="service reveal">
+              <span class="service__ic"><Icon name={s.icon} size={30} /></span>
+              <h3>{s.title}</h3>
+              <p>{s.lead}</p>
+              <ul>{s.items.map((it) => <li>{it}</li>)}</ul>
+              <span class="service__foot">
+                {min && <span>od <strong>{fmt(min)} Kč</strong></span>}
+                <span class="service__more">Ceník <Icon name="arrow" size={16} /></span>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- O NÁS -->
+  <section class="section section--sand" id="o-nas">
+    <div class="container about">
+      <div class="about__visual reveal">
+        <Photo src={recepce} alt="Recepce salonu Janat s červenými křesly a fotografiemi Audrey Hepburn a Marilyn Monroe" sizes="(max-width: 960px) 92vw, 540px" class="about__main" />
+        <Photo src={pedikura} alt="Pedikérské křeslo v salonu Janat" sizes="(max-width: 960px) 45vw, 260px" class="about__small" widths={[320, 520, 800]} />
+        <div class="about__badge" aria-hidden="true"><strong>od 2012</strong><span>na Smíchově</span></div>
+      </div>
+      <div class="about__text reveal">
+        <span class="eyebrow">O nás</span>
+        <h2>Malý salon s <em>velkým srdcem</em></h2>
+        <p>
+          Salon Beauty &amp; Care Janat je s vámi už od roku 2012. Za ty roky jsme si vybudovali
+          věrné klientky i klienty, kteří se k nám rádi vracejí – za zkušeným personálem, kvalitní
+          péčí, příjemnou atmosférou a férovými cenami.
+        </p>
+        <p>
+          Postaráme se o vaše vlasy, řasy, pleť, nehty i o celkovou relaxaci těla. Nejvíc nás baví
+          pedikúra, manikúra a přístrojová kosmetika, po které jsou výsledky opravdu kouzelné.
+          A zatímco čekáte, uvaříme vám výborný šálek kávy.
+        </p>
+        <ul class="about__list">
+          <li><Icon name="sparkle" size={18} /> Zkušený personál a osobní přístup</li>
+          <li><Icon name="sparkle" size={18} /> Přístrojová kosmetika s viditelnými výsledky</li>
+          <li><Icon name="sparkle" size={18} /> Káva a chvíle klidu v útulné recepci</li>
+        </ul>
+        <a href="/rezervace" class="btn btn--primary">Objednat se</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CITÁT -->
+  <section class="quote">
+    <figure class="container reveal">
+      <blockquote>„Vše má své kouzlo, ale ne všichni ho vidí.“</blockquote>
+      <figcaption>Konfucius · naše oblíbená myšlenka</figcaption>
+    </figure>
+  </section>
+
+  <!-- REZERVACE -->
+  <section class="section" id="rezervace">
+    <div class="container">
+      <div class="center reveal">
+        <span class="eyebrow">Online rezervace</span>
+        <h2>Objednejte se <em>za minutu</em></h2>
+        <p class="lead">Vyberte službu, den a čas, který vám vyhovuje. Rezervaci můžete kdykoliv zrušit.</p>
+      </div>
+      <ol class="steps reveal">
+        <li><span>1</span>Vyberte službu</li>
+        <li><span>2</span>Zvolte volný termín</li>
+        <li><span>3</span>Potvrzení přijde e-mailem</li>
+      </ol>
+      <div class="reveal"><Booking /></div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section class="section section--sand" id="kontakt">
+    <div class="container contact">
+      <div class="reveal">
+        <span class="eyebrow">Kde nás najdete</span>
+        <h2>Těšíme se na <em>vaši návštěvu</em></h2>
+        <p class="lead">{site.directions}</p>
+        <ContactInfo />
+      </div>
+      <a class="mapcard reveal" href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+        <Photo src={vyloha} alt="Výloha salonu Janat na ulici Plzeňská" sizes="(max-width: 960px) 92vw, 560px" class="mapcard__img" />
+        <span class="mapcard__label">
+          <span class="mapcard__txt"><strong>Takhle nás poznáte</strong>{site.address.street}, Praha 5</span>
+          <span class="mapcard__go">Navigovat <Icon name="arrow" size={16} /></span>
+        </span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* HERO */
+  .hero { position: relative; padding-block: clamp(2.5rem, 7vw, 5rem) clamp(3.5rem, 8vw, 6rem); overflow: hidden;
+    background: radial-gradient(ellipse at 85% 10%, var(--blush) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, var(--sand), transparent 50%); }
+  .hero__grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .hero h1 { margin-bottom: 1.4rem; }
+  .hero h1 em { display: block; }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin: 2rem 0 2.6rem; }
+  .hero__facts { list-style: none; padding: 0; margin: 0; display: flex; gap: clamp(1.4rem, 4vw, 3rem); border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  .hero__facts strong { display: block; font-family: var(--serif); font-size: 2.2rem; font-weight: 500; line-height: 1; color: var(--rose-deep); }
+  .hero__facts span { font-size: .85rem; color: var(--ink-soft); }
+
+  .hero__visual { position: relative; aspect-ratio: 4 / 5; max-width: 460px; justify-self: center; width: 100%; }
+  .arch { position: absolute; inset: 0 8% 0 8%; border-radius: 999px 999px 28px 28px; box-shadow: 0 40px 80px -30px rgba(37, 45, 103, .35); overflow: hidden; background: var(--blush); }
+  .arch :global(picture), .arch :global(img) { display: block; width: 100%; height: 100%; }
+  .arch :global(img) { object-fit: cover; object-position: 55% 50%; filter: saturate(.92) sepia(.08); }
+  .arch::after { content: ''; position: absolute; inset: 12px; border-radius: inherit; border: 1px solid rgba(255,255,255,.55); pointer-events: none; }
+  .circle { position: absolute; width: 38%; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--rose); right: -2%; top: 6%; z-index: -1; }
+  .float-card { position: absolute; display: flex; align-items: center; gap: .7rem; background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+    padding: .85rem 1.15rem; border-radius: 16px; box-shadow: var(--shadow); font-size: .88rem; font-weight: 600; animation: float 6s ease-in-out infinite; }
+  .float-card--top { left: -4%; top: 16%; }
+  .float-card--bottom { right: -4%; bottom: 12%; animation-delay: -3s; color: var(--rose-deep); }
+  .float-card--bottom div { display: flex; flex-direction: column; color: var(--ink); line-height: 1.3; }
+  .float-card--bottom span { font-weight: 400; font-size: .8rem; color: var(--ink-soft); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #6fae7c; box-shadow: 0 0 0 4px rgba(111,174,124,.2); }
+  @keyframes float { 50% { transform: translateY(-10px); } }
+
+  /* VALUES */
+  .values { border-block: 1px solid var(--line); background: var(--white); }
+  .values__grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .value { display: flex; gap: 1.1rem; padding: 2.2rem 1.8rem; }
+  .value + .value { border-left: 1px solid var(--line); }
+  .value > :global(svg) { flex: none; color: var(--rose); }
+  .value h3 { font-size: 1.45rem; margin-bottom: .3rem; }
+  .value p { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+
+  /* SERVICES */
+  .section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; margin-bottom: 3rem; }
+  .section-head h2 { margin: 0; }
+  .section-head .lead { margin: 0; }
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+  .service { display: flex; flex-direction: column; text-decoration: none; background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 2rem 1.8rem 1.6rem; transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, opacity .9s ease; transition-delay: var(--d, 0ms); }
+    .service:nth-child(3n+2) { --d: 80ms; } .service:nth-child(3n) { --d: 160ms; }
+  .service:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--blush); transition-delay: 0ms; }
+  .service__ic { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: var(--sand); color: var(--rose-deep); margin-bottom: 1.4rem; transition: background .3s; }
+  .service:hover .service__ic { background: var(--blush); }
+  .service h3 { font-size: 1.75rem; }
+  .service p { color: var(--ink-soft); font-size: .95rem; }
+  .service ul { list-style: none; padding: 0; margin: 0 0 1.5rem; font-size: .9rem; display: grid; gap: .35rem; }
+  .service li { padding-left: 1.1rem; position: relative; }
+  .service li::before { content: ''; position: absolute; left: 0; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+  .service__foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 1.1rem; font-size: .9rem; }
+  .service__foot strong { color: var(--rose-deep); }
+  .service__more { display: inline-flex; align-items: center; gap: .35rem; font-weight: 600; }
+  .service:hover .service__more :global(svg) { transform: translateX(4px); }
+  .service__more :global(svg) { transition: transform .3s; }
+
+  /* ABOUT */
+  .about { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2.5rem, 7vw, 6rem); align-items: center; }
+  .about__visual { position: relative; width: 100%; max-width: 540px; justify-self: center; padding: 0 12% 14% 0; }
+  .about__visual :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .about__visual :global(.about__main) { border-radius: 220px 220px 24px 24px; aspect-ratio: 4 / 5; box-shadow: var(--shadow); }
+  .about__visual :global(.about__small) { position: absolute; right: 0; bottom: 0; width: 48%; height: auto; aspect-ratio: 1; border-radius: 24px; border: 8px solid var(--sand); box-shadow: var(--shadow); }
+  .about__badge { position: absolute; left: -4%; top: 12%; background: var(--ink); color: var(--cream); padding: 1rem 1.4rem; border-radius: 20px; box-shadow: var(--shadow); text-align: center; line-height: 1.1; }
+  .about__badge strong { display: block; font-family: var(--serif); font-size: 1.8rem; font-weight: 500; }
+  .about__badge span { font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blush); }
+  .about__list { list-style: none; padding: 0; margin: 1.6rem 0 2rem; display: grid; gap: .7rem; }
+  .about__list li { display: flex; gap: .7rem; align-items: flex-start; }
+  .about__list :global(svg) { flex: none; margin-top: .3rem; color: var(--rose); }
+
+  /* STEPS */
+  .steps { list-style: none; padding: 0; margin: 2.2rem auto 2.6rem; display: flex; justify-content: center; flex-wrap: wrap; gap: .8rem 2.4rem; }
+  .steps li { display: flex; align-items: center; gap: .7rem; font-weight: 500; }
+  .steps span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--rose); color: var(--rose-deep); font-family: var(--serif); font-size: 1.15rem; }
+
+  /* CONTACT */
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+  .contact .lead { margin-bottom: 2.2rem; }
+  .mapcard { position: relative; display: block; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); text-decoration: none; aspect-ratio: 5 / 4; }
+  .mapcard :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
+  .mapcard:hover :global(img) { transform: scale(1.04); }
+  .mapcard__label { position: absolute; left: 1.2rem; right: 1.2rem; bottom: 1.2rem; background: rgba(255,255,255,.95); border-radius: 16px; padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .mapcard__txt { display: flex; flex-direction: column; font-size: .9rem; color: var(--ink-soft); line-height: 1.4; }
+  .mapcard__txt strong { color: var(--ink); font-size: 1rem; }
+  .mapcard__go { display: inline-flex; align-items: center; gap: .4rem; color: var(--rose-deep); font-weight: 600; font-size: .9rem; }
+
+  /* QUOTE */
+  .quote { padding-block: clamp(3.5rem, 8vw, 5.5rem); background: var(--ink); color: var(--cream); text-align: center; }
+  .quote figure { margin-inline: auto; }
+  .quote blockquote { margin: 0 auto; max-width: 22ch; font-family: var(--serif); font-style: italic; font-size: clamp(1.9rem, 4.5vw, 3rem); line-height: 1.2; }
+  .quote figcaption { margin-top: 1.2rem; font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+
+  @media (max-width: 960px) {
+    .hero__grid, .about, .contact, .section-head { grid-template-columns: 1fr; }
+    .hero__visual { max-width: 360px; order: -1; }
+    .services { grid-template-columns: repeat(2, 1fr); }
+    .values__grid { grid-template-columns: 1fr; }
+    .value + .value { border-left: 0; border-top: 1px solid var(--line); }
+    .about__visual { max-width: 440px; }
+  }
+  @media (max-width: 640px) {
+    .services { grid-template-columns: 1fr; }
+    .hero__visual { max-width: 280px; }
+    .float-card--top { left: -10%; }
+    .float-card--bottom { right: -10%; }
+    .hero__facts strong { font-size: 1.8rem; }
+    .value { padding: 1.6rem 0; }
+  }
+</style>

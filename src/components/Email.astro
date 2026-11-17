@@ -1,0 +1,12 @@
+---
+/**
+ * E-mail chráněný proti robotům (scraping → spam).
+ * Adresa není v HTML v čitelné podobě – složí se až v prohlížeči.
+ */
+interface Props { address: string; class?: string }
+const { address, class: cls } = Astro.props;
+const encoded = Buffer.from(address.split('').reverse().join(''), 'utf8').toString('base64');
+---
+<a href="#" class={cls} data-email={encoded} rel="nofollow">
+  <span>e-mail zobrazíte po načtení stránky</span>
+</a>

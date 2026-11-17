@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Email from '../components/Email.astro';
+import { site } from '../data/site';
+const t = site.terms;
+const op = site.operator;
+---
+<Base title="Obchodní a rezervační podmínky" description="Obchodní, rezervační a storno podmínky salonu Beauty & Care Janat.">
+  <PageHero eyebrow="Podmínky" title="Obchodní a <em>rezervační podmínky</em>"
+    lead="Pravidla jsou krátká a férová – aby se u nás každý cítil dobře a měl na sebe dost času." />
+  <section class="container prose terms">
+    <h2>1. Provozovatel</h2>
+    <p>
+      Provozovatelem salonu {site.name} je {op.name || site.name}{op.ico && `, IČO ${op.ico}`},
+      provozovna {site.address.street}, {site.address.zip} {site.address.city}
+      (dále jen „salon“). Kontakt: {site.phone}{site.email && <>, <Email address={site.email} /></>}.
+    </p>
+
+    <h2>2. Objednání a rezervace</h2>
+    <ul>
+      <li>Termín si můžete rezervovat online přes rezervační systém Noona, telefonicky nebo osobně v salonu.</li>
+      <li>Rezervace je závazná okamžikem potvrzení. Potvrzení a připomínku obdržíte e-mailem či SMS.</li>
+      <li>Ve středu přijímáme klientky a klienty pouze na předchozí objednání.</li>
+    </ul>
+
+    <h2>3. Zrušení a změna termínu</h2>
+    <ul>
+      <li>Termín můžete zdarma zrušit nebo přesunout nejpozději <strong>{t.cancellationHours} hodin</strong> předem – přes odkaz v potvrzení rezervace, telefonicky nebo e-mailem.</li>
+      <li>Při opakovaném nedostavení se bez omluvy si salon vyhrazuje právo další online rezervace odmítnout nebo požadovat zálohu.</li>
+      <li>Pokud salon z vážných důvodů (např. nemoc) nemůže termín dodržet, co nejdříve vás kontaktuje a nabídne náhradní termín.</li>
+    </ul>
+
+    <h2>4. Pozdní příchod</h2>
+    <p>
+      Prosíme, choďte včas. Při zpoždění delším než {t.lateMinutes} minut může být ošetření zkráceno
+      (za plnou cenu), nebo – pokud by to omezilo další objednané – přeloženo na jiný termín.
+    </p>
+
+    <h2>5. Ceny a platba</h2>
+    <ul>
+      <li>Platí ceny uvedené v aktuálním <a href="/cenik">ceníku</a> v den poskytnutí služby. Ceny jsou konečné.</li>
+      <li>U služeb s cenovým rozpětím (např. dle délky a hustoty vlasů) vás o konečné ceně informujeme před zahájením.</li>
+      <li>Platba probíhá na místě po poskytnutí služby, {t.payment}.</li>
+    </ul>
+
+    <h2>6. Zdravotní stav a průběh ošetření</h2>
+    <ul>
+      <li>Před ošetřením nás prosím informujte o alergiích, těhotenství, kožních onemocněních, užívaných lécích či jiných okolnostech, které mohou ošetření ovlivnit.</li>
+      <li>Pokud by ošetření mohlo ohrozit vaše zdraví, může jej odbornice odmítnout nebo doporučit jiný postup.</li>
+      <li>Výsledek některých ošetření závisí i na domácí péči a individuálních dispozicích pleti, vlasů či nehtů.</li>
+    </ul>
+
+    <h2>7. Reklamace</h2>
+    <p>
+      Nejste-li se službou spokojeni, dejte nám prosím vědět co nejdříve – ideálně do 3 dnů od jejího
+      poskytnutí – osobně, telefonicky nebo e-mailem. Reklamaci vyřídíme bez zbytečného odkladu, nejpozději
+      do 30 dnů, a to nejčastěji bezplatnou opravou či úpravou.
+    </p>
+
+    <h2>8. Mimosoudní řešení sporů</h2>
+    <p>
+      Případné spory se spotřebiteli lze řešit i mimosoudně. Příslušným subjektem je Česká obchodní
+      inspekce, <a href="https://adr.coi.cz" target="_blank" rel="noopener noreferrer">adr.coi.cz</a>.
+    </p>
+
+    <h2>9. Osobní údaje</h2>
+    <p>Zpracování osobních údajů se řídí <a href="/ochrana-osobnich-udaju">zásadami ochrany osobních údajů</a>.</p>
+
+    <h2>10. Autorská práva</h2>
+    <p>
+      Obsah tohoto webu – zejména texty, fotografie, logo a grafická podoba – je chráněn autorským zákonem
+      (č. 121/2000 Sb.). Jakékoli kopírování či další šíření bez předchozího písemného souhlasu provozovatele
+      je zakázáno. Názvy a loga uvedených kosmetických značek patří jejich vlastníkům.
+    </p>
+
+    <h2>11. Závěrečná ustanovení</h2>
+    <p>
+      Tyto podmínky se řídí právním řádem České republiky, zejména zákonem č. 89/2012 Sb., občanský zákoník,
+      a zákonem č. 634/1992 Sb., o ochraně spotřebitele. Platné od {t.validFrom}.
+    </p>
+  </section>
+</Base>
+<style>
+  .terms { padding-bottom: 5rem; }
+</style>

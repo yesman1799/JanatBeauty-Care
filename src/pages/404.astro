@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Stránka nenalezena" noindex>
+  <section class="container center nf">
+    <span class="eyebrow">Chyba 404</span>
+    <h1>Tady nic <em>není</em></h1>
+    <p class="lead">Stránka, kterou hledáte, neexistuje nebo byla přesunuta.</p>
+    <p class="nf__cta">
+      <a href="/" class="btn btn--primary">Zpět na úvod</a>
+      <a href="/rezervace" class="btn btn--ghost">Rezervace</a>
+    </p>
+  </section>
+</Base>
+<style>
+  .nf { padding-block: 7rem; }
+  .nf__cta { margin-top: 2rem; display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+</style>

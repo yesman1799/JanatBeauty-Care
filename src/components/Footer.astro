@@ -1,0 +1,66 @@
+---
+import Icon from './Icon.astro';
+import Email from './Email.astro';
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+const tel = site.phone.replace(/\s/g, '');
+---
+<footer class="footer">
+  <div class="container footer__grid">
+    <div>
+      <a href="/" class="footer__logo"><img src="/logo-light.svg" alt="Janat beauty &amp; care" width="110" height="116" /></a>
+      <p class="footer__tag">{site.tagline}. Místo, kde si odpočinete a odejdete krásnější.</p>
+      {(site.social.instagram || site.social.facebook) && (
+        <div class="footer__social">
+          {site.social.instagram && <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Icon name="instagram" size={20} /></a>}
+          {site.social.facebook && <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Icon name="facebook" size={20} /></a>}
+        </div>
+      )}
+    </div>
+    <div>
+      <h2 class="footer__h">Kontakt</h2>
+      <ul class="footer__list">
+        <li><Icon name="pin" size={18} /><a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">{site.address.street}<br />{site.address.zip} {site.address.city}</a></li>
+        <li><Icon name="phone" size={18} /><a href={`tel:${tel}`}>{site.phone}</a></li>
+        {site.email && <li><Icon name="mail" size={18} /><Email address={site.email} /></li>}
+      </ul>
+    </div>
+    <div>
+      <h2 class="footer__h">Navigace</h2>
+      <ul class="footer__list footer__list--plain">
+        <li><a href="/rezervace">Online rezervace</a></li>
+        <li><a href="/#sluzby">Služby</a></li>
+        <li><a href="/kontakt">Kontakt</a></li>
+        <li><a href="/obchodni-podminky">Obchodní podmínky</a></li>
+        <li><a href="/ochrana-osobnich-udaju">Ochrana osobních údajů</a></li>
+        <li><button type="button" class="linklike" data-cookie-settings>Nastavení cookies</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© {site.foundedYear}–{year} {site.name}{site.operator.name && ` · ${site.operator.name}`}{site.operator.ico && ` · IČO ${site.operator.ico}`}. Všechna práva vyhrazena.</span>
+    <span>Texty a fotografie nelze bez souhlasu dále šířit.</span>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--ink); color: #e4e6f3; padding-block: 4.5rem 2rem; }
+  .footer a { color: inherit; text-decoration: none; }
+  .footer a:hover { color: var(--white); }
+  .footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 3rem; }
+  .footer__logo { display: inline-block; }
+  .footer__logo img { height: 116px; width: auto; }
+  .footer__tag { color: #b9bdd8; max-width: 22rem; margin-top: .6rem; }
+  .footer__h { font-family: var(--sans); font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 1.2rem; }
+  .footer__list { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
+  .footer__list li { display: flex; gap: .7rem; align-items: flex-start; }
+  .footer__list :global(svg) { flex: none; margin-top: .3rem; color: var(--gold); }
+  .footer__list--plain { gap: .55rem; }
+  .footer__social { display: flex; gap: .8rem; margin-top: 1.2rem; }
+  .footer__social a { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid #4a5290; border-radius: 50%; }
+  .footer__social a:hover { border-color: var(--gold); }
+  .linklike { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; text-align: left; }
+  .linklike:hover { color: var(--white); }
+  .footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid #3c447f; margin-top: 3.5rem; padding-top: 1.6rem; font-size: .85rem; color: #9aa0c6; }
+  @media (max-width: 820px) { .footer__grid { grid-template-columns: 1fr; gap: 2.2rem; } }
+</style>

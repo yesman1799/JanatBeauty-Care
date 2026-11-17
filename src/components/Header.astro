@@ -1,0 +1,75 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/', label: 'Úvod' },
+  { href: '/#sluzby', label: 'Služby' },
+  { href: '/#o-nas', label: 'O nás' },
+  { href: '/kontakt', label: 'Kontakt' },
+];
+---
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a href="/" class="logo" aria-label={`${site.name} – úvodní stránka`}>
+      <img src="/logo.svg" alt="" width="62" height="66" class="logo__img" />
+    </a>
+
+    <nav class="nav" id="main-nav" aria-label="Hlavní navigace" data-nav>
+      <ul>
+        {nav.map((n) => (
+          <li><a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+      <a href="/rezervace" class="btn btn--primary nav__cta">
+        <Icon name="calendar" size={18} /> Rezervovat termín
+      </a>
+    </nav>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" data-nav-toggle>
+      <span class="visually-hidden">Otevřít menu</span>
+      <Icon name="menu" size={26} class="nav-toggle__open" />
+      <Icon name="close" size={26} class="nav-toggle__close" />
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 248, 246, 0.85);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s ease, background-color .3s ease;
+  }
+  .site-header.is-scrolled { border-bottom-color: var(--line); background: rgba(250, 248, 246, 0.96); }
+  .site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 86px; }
+  .logo { display: flex; align-items: center; text-decoration: none; }
+  .logo__img { height: 66px; width: auto; }
+  .nav { display: flex; align-items: center; gap: 2rem; }
+  .nav ul { list-style: none; display: flex; gap: 1.8rem; margin: 0; padding: 0; }
+  .nav ul a { text-decoration: none; font-size: .93rem; font-weight: 500; position: relative; padding-block: .3rem; }
+  .nav ul a::after { content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: var(--rose); transition: right .3s ease; }
+  .nav ul a:hover::after, .nav ul a[aria-current='page']::after { right: 0; }
+  .nav__cta { padding: .8rem 1.3rem; }
+
+  .nav-toggle { display: none; background: none; border: 0; color: var(--ink); cursor: pointer; padding: .5rem; margin-right: -.5rem; }
+  .nav-toggle :global(.nav-toggle__close) { display: none; }
+
+  @media (max-width: 900px) {
+    .nav-toggle { display: block; }
+    .nav {
+      position: fixed; inset: 86px 0 auto 0; flex-direction: column; align-items: stretch; gap: 1.5rem;
+      background: var(--cream); padding: 1.5rem var(--gutter) 2rem; border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transform: translateY(-8px); opacity: 0; visibility: hidden; transition: all .25s ease;
+    }
+    .nav.is-open { transform: none; opacity: 1; visibility: visible; }
+    .nav ul { flex-direction: column; gap: .2rem; }
+    .nav ul a { display: block; font-family: var(--serif); font-size: 1.7rem; padding-block: .35rem; }
+    .nav ul a::after { display: none; }
+    .nav-toggle[aria-expanded='true'] :global(.nav-toggle__open) { display: none; }
+    .nav-toggle[aria-expanded='true'] :global(.nav-toggle__close) { display: block; }
+  }
+</style>

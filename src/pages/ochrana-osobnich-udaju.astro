@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Email from '../components/Email.astro';
+import { site } from '../data/site';
+const operator = site.operator.name || site.name;
+---
+<Base title="Ochrana osobních údajů a cookies" description="Jak Beauty & Care Janat zachází s osobními údaji a cookies.">
+  <PageHero eyebrow="GDPR" title="Ochrana osobních údajů <em>&amp; cookies</em>" />
+  <section class="container prose gdpr">
+    <h2>Kdo je správce</h2>
+    <p>
+      Správcem osobních údajů je {operator}{site.operator.ico && `, IČO ${site.operator.ico}`},
+      se sídlem provozovny {site.address.street}, {site.address.zip} {site.address.city}.
+      Kontakt: telefon {site.phone}{site.email && <>, e-mail <Email address={site.email} /></>}.
+    </p>
+
+    <h2>Jaké údaje zpracováváme</h2>
+    <ul>
+      <li><strong>Rezervace termínu</strong> – jméno, telefon, e-mail a zvolená služba. Údaje zadáváte do rezervačního systému Noona (Noona HQ ehf., Island, EU/EHP), který je pro nás zpracovává jako zpracovatel. Účel: vyřízení a připomenutí rezervace. Právní základ: plnění smlouvy.</li>
+      <li><strong>Telefonická a e-mailová komunikace</strong> – údaje, které nám sami sdělíte, a to pouze za účelem vyřízení vašeho požadavku.</li>
+    </ul>
+    <p>Tento web nepoužívá žádné kontaktní formuláře, analytické ani reklamní nástroje a nesleduje vaše chování.</p>
+
+    <h2 id="cookies">Cookies</h2>
+    <ul>
+      <li><strong>Nezbytné (tento web)</strong> – do úložiště vašeho prohlížeče ukládáme pouze vaši volbu ohledně cookies. Nejde o cookie posílanou na server a nesleduje vás.</li>
+      <li><strong>Rezervační systém Noona (třetí strana)</strong> – rezervační okno se načte až po vašem souhlasu nebo kliknutí na „Zobrazit volné termíny“. Noona může ukládat vlastní cookies nezbytné pro chod rezervace. Více v <a href="https://noona.app/privacy-policy" target="_blank" rel="noopener noreferrer">zásadách Noona</a>.</li>
+    </ul>
+    <p>Svůj souhlas můžete kdykoliv změnit: <button type="button" class="btn btn--ghost btn--sm" data-cookie-settings>Nastavení cookies</button></p>
+    <p>Odkaz na Google Mapy otevírá mapu na stránkách Googlu – na našem webu se mapy nenačítají.</p>
+
+    <h2>Jak dlouho údaje uchováváme</h2>
+    <p>Po dobu nezbytnou k poskytnutí služby a plnění zákonných povinností (např. účetní doklady 10 let).</p>
+
+    <h2>Vaše práva</h2>
+    <p>
+      Máte právo na přístup k údajům, jejich opravu, výmaz, omezení zpracování, přenositelnost a právo vznést námitku.
+      Stížnost můžete podat u Úřadu pro ochranu osobních údajů (<a href="https://uoou.gov.cz" target="_blank" rel="noopener noreferrer">uoou.gov.cz</a>).
+    </p>
+    <p><small>Platné od {site.terms.validFrom}.</small></p>
+  </section>
+</Base>
+<style>
+  .gdpr { padding-bottom: 5rem; }
+  .btn--sm { padding: .5rem 1rem; font-size: .85rem; }
+</style>

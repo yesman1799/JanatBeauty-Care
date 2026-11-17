@@ -1,0 +1,45 @@
+---
+import Icon from './Icon.astro';
+import Email from './Email.astro';
+import { site } from '../data/site';
+const tel = site.phone.replace(/\s/g, '');
+---
+<div class="ci">
+  <ul class="ci__list">
+    <li>
+      <span class="ci__ic"><Icon name="pin" size={20} /></span>
+      <div><strong>Adresa</strong><a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">{site.address.street}, {site.address.zip} {site.address.city}</a></div>
+    </li>
+    <li>
+      <span class="ci__ic"><Icon name="phone" size={20} /></span>
+      <div><strong>Telefon</strong><a href={`tel:${tel}`}>{site.phone}</a></div>
+    </li>
+    {site.email && (
+      <li>
+        <span class="ci__ic"><Icon name="mail" size={20} /></span>
+        <div><strong>E-mail</strong><Email address={site.email} /></div>
+      </li>
+    )}
+    <li>
+      <span class="ci__ic"><Icon name="clock" size={20} /></span>
+      <div>
+        <strong>Provozní doba</strong>
+        <dl class="ci__hours">
+          {site.hours.map((h) => (<><dt>{h.days}</dt><dd>{h.time}</dd></>))}
+        </dl>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<style>
+  .ci__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .ci__list li { display: flex; gap: 1rem; align-items: flex-start; }
+  .ci__ic { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--blush); color: var(--rose-deep); }
+  .ci__list strong { display: block; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; margin-bottom: .15rem; }
+  .ci__list a { text-decoration: none; font-size: 1.1rem; }
+  .ci__list a:hover { color: var(--rose-deep); }
+  .ci__hours { display: grid; grid-template-columns: auto 1fr; gap: .15rem 1.2rem; margin: 0; }
+  .ci__hours dt { font-weight: 600; }
+  .ci__hours dd { margin: 0; color: var(--ink-soft); }
+</style>
